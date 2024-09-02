@@ -214,7 +214,7 @@ WebAppData get_web_app_data() {
     strcpy(data.signal_strength,temp_signal_strength);
 
     char temp_comms_link_status[12] = "";
-    sprintf(temp_comms_link_status,"%d,%d,%d,%d",b_sim_ok,b_udp_ok,b_dtls_ok,b_mcu_to_modem_ok);
+    sprintf(temp_comms_link_status,"%d,%d,%d,%d",g_b_sim_ok,g_b_udp_ok,g_b_dtls_ok,g_b_mcu_to_modem_ok);
     strcpy(data.comms_link_status,temp_comms_link_status);
     // LOGW("%s",data.signal_strength);
 

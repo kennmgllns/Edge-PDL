@@ -16,7 +16,7 @@ int8_t wifi_state; // 0 offline, 1 online, 2 idle
 int8_t lora_state;
 int8_t blufi_state;
 int8_t _4g_state;
-bool b_dtls_ok;
-bool b_mcu_to_modem_ok;
-bool b_sim_ok;
-bool b_udp_ok;
+bool g_b_dtls_ok;
+bool g_b_mcu_to_modem_ok;
+bool g_b_sim_ok;
+bool g_b_udp_ok;

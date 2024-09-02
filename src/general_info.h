@@ -19,9 +19,9 @@ extern int8_t wifi_state; // 0 offline, 1 online, 2 idle
 extern int8_t lora_state;
 extern int8_t blufi_state;
 extern int8_t _4g_state;
-extern bool b_dtls_ok;
-extern bool b_mcu_to_modem_ok;
-extern bool b_sim_ok;
-extern bool b_udp_ok;
+extern bool g_b_dtls_ok;
+extern bool g_b_mcu_to_modem_ok;
+extern bool g_b_sim_ok;
+extern bool g_b_udp_ok;
 
 #endif // GENERAL_INFO_H

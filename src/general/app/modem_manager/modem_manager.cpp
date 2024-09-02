@@ -129,6 +129,7 @@ void cycle()
         } else {
             LOGD("init-AT ok");
             setCommsFlag(MCU_TO_MODEM_COMMS, true);
+            g_b_mcu_to_modem_ok = true;
             s_status.u8_check_retry = 0;
             e_state                 = STATE_AT_CONFIG;
             e_config_state          = CONFIG_STATE_INIT_CONFIG;
@@ -165,6 +166,7 @@ void cycle()
         if ((0 != mdev.s_info.ac_imsi[0]) || (true == mdev.get_sim_info()))
         {
             setCommsFlag(SIM, true);
+            g_b_sim_ok = true;
             e_state = STATE_NET_STATUS;
             e_network_state = NETWORK_STATE_GET_SIGNAL_QUALITY;
             (void)mdev.set_lterat_search(0);
@@ -282,6 +284,11 @@ void reset(bool b_full_reset)
         setCommsFlag(MCU_TO_MODEM_COMMS, false);
         setCommsFlag(4G_CONN, false);
         setCommsFlag(NETWORK_OPERATOR, false);
+        _4g_state = 0;
+        g_b_dtls_ok = false;
+        g_b_mcu_to_modem_ok = false;
+        g_b_sim_ok = false;
+        g_b_udp_ok = false;
     }
     else if (mdev.is_powerdown())
     {
@@ -698,6 +705,7 @@ static bool processDataConnState(void)
         {
             (void)mdev.get_connection_config((CellularModem::pdp_ctx_et)mdev.s_cnx_cfg.id_ctx);
             setCommsFlag(4G_CONN, true);
+            _4g_state = 1;
             LOGI("ctx=%d apn=%s ip=%s", mdev.s_cnx_cfg.id_ctx, mdev.s_cnx_cfg.ac_apn, mdev.s_cnx_cfg.ac_address);
             pdp::init_sessions();
             e_pdpctx_state = PDPCTX_STATE_READY;
