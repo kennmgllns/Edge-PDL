@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Edge-PDL</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/style.css" rel="stylesheet">
+  <script>
+    
+
+    async function fetchData() {
+      try {
+        const response = await fetch('/data'); // Fetch data from ESP
+        const data = await response.json();
+
+        // Update device information
+        document.getElementById('sn-id-fw').innerText = data.serial_number + " (" + data.device_id + ") v" + data.fw_version;
+        document.getElementById('serial-number').innerText = data.serial_number;
+        document.getElementById('device-id').innerText = data.device_id;
+        document.getElementById('fw-version').innerText = data.fw_version;
+        document.getElementById('enmtr-version').innerText = data.enmtr_version;
+        document.getElementById('modem').innerText = data.modem;
+        document.getElementById('imei').innerText = data.imei;
+        document.getElementById('imsi').innerText = data.imsi;
+        document.getElementById('ccid').innerText = data.ccid;
+      
+        // const commsArray = data.active_comms.split(',');
+        // const activeCommsElement = document.getElementById('active-comms');
+        // const formattedList = commsArray.map(item => `<span style="color: #0ac;">${item}</span>`).join(', ');
+        // activeCommsElement.innerHTML = `[${formattedList}]`;
+        
+        // const commsStatusArray = data.active_comms_status.split(',');
+        // const activeCommsStatusElement = document.getElementById('active-comms-status');
+
+        // let formattedStatusList = '';
+        // let abs_comms_status = ["Offline","Online","Idle"];
+        // let status_colors = ["#ff0000","#00ff00","#8f8f8f"]
+        // for (let i = 0; i < commsStatusArray.length; i++) {
+        //   formattedStatusList += `<span style="color: ${status_colors[commsStatusArray[i]]};">${abs_comms_status[commsStatusArray[i]]}</span>`;
+        //   if (i < commsStatusArray.length - 1) {
+        //       formattedStatusList += ', ';
+        //   }     
+        // }
+        // const formattedStatusList = commsStatusArray.map(item => `<span style="color: #0ac;">${item}</span>`).join(', ');
+        // activeCommsStatusElement.innerHTML = `[${formattedStatusList}]`;
+        // document.getElementById('active-comms-status').innerText = data.active_comms_status;
+        // document.getElementById('comms-link-status').innerText = data.comms_link_status;
+        // document.getElementById('signal-strength').innerText = data.signal_strength;
+
+
+
+
+
+
+      // Example arrays with data
+        const activeCommsArray = data.active_comms.split(',');
+        let abs_comms_status = ["Offline","Online","Idle"];
+        let status_colors = ["#ff0000","#00ff00","#8f8f8f"];
+        const activeCommsStatusArray = data.active_comms_status.split(',');
+      // const mappedCommsStatusArray = activeCommsStatusArray.map(num => abs_comms_status[parseInt(num)]);
+        const mappedCommsStatusArray = activeCommsStatusArray.map(num => {
+            const index = parseInt(num);
+            return `<span style="color: ${status_colors[index]};">${abs_comms_status[index]}</span>`;
+        });
+        const commsLinkStatusArray = data.comms_link_status.split(',');
+        const signalStrengthArray = data.signal_strength.split(',');
+
+      // Convert arrays to comma-separated strings
+        const activeCommsString = activeCommsArray.join('<br>');
+        const activeCommsStatusString = mappedCommsStatusArray.join('<br>');
+        const commsLinkStatusString = commsLinkStatusArray.join('<br>');
+        const signalStrengthString = signalStrengthArray.join('<br>');
+
+        // Update the table cells with the corresponding data
+        document.getElementById('active-comms').innerHTML = activeCommsString;
+        document.getElementById('active-comms-status').innerHTML = activeCommsStatusString;
+        document.getElementById('signal-strength').innerHTML = signalStrengthString;
+        document.getElementById('comms-link-status').innerHTML = commsLinkStatusString;
+
+
+
+        // Update last data sent and measurement interval
+        document.getElementById('last-data-sent').innerText = data.last_data_sent;
+        document.getElementById(data.measure_interval === '1sec' ? '1sec' : '1min').checked = true;
+
+        // Update critical and non-critical phase data
+        document.getElementById('Vave-1').innerText = data.critical.phase1.vave;
+        document.getElementById('Vave-2').innerText = data.critical.phase2.vave;
+        document.getElementById('Iave-1').innerText = data.critical.phase1.iave;
+        document.getElementById('Iave-2').innerText = data.critical.phase2.iave;
+        // (Continue for all fields...)
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    setInterval(fetchData, 1000);
+    // Call fetchData when the page loads
+    window.onload = fetchData;
+  </script>
+</head>
+<body>
+
+  <h2>Edge Near Field Control V1.0</h2>
+  <h5 id="sn-id-fw" style="color: #0ac;">-- -- --</h5>
+  <div class="tabs">
+
+    <input class="tab-input" name="tabs" type="radio" id="tab-1" checked="checked"/>
+    <label class="tab-label" for="tab-1">Device</label>
+    <div class="panel">
+      <table class="table-info" rules=rows>
+        <tr><td>Serial Number</td><td id="serial-number">Loading...</td></tr>
+        <tr><td>Device ID</td><td id="device-id">Loading...</td></tr>
+        <tr><td>FW Version</td><td id="fw-version">Loading...</td></tr>
+        <tr><td>Enmtr Version</td><td id="enmtr-version">Loading...</td></tr>
+        <tr><td>Modem</td><td id="modem">Loading...</td></tr>
+        <tr><td>IMEI</td><td id="imei">Loading...</td></tr>
+        <tr><td>IMSI</td><td id="imsi">Loading...</td></tr>
+        <tr><td>CCID</td><td id="ccid">Loading...</td></tr>
+        <!-- <tr><td>Active Comms</td><td id="active-comms">Loading...</td></tr>
+        <tr><td>Active Comms Status</td><td id="active-comms-status">Loading...</td></tr>
+        <tr><td>Comms Link Status</td><td id="comms-link-status">Loading...</td></tr>
+        <tr><td>Signal Strength</td><td id="signal-strength">Loading...</td></tr> -->
+        <table style="border-collapse: collapse; width: 100%; table-layout: fixed;">
+          <tr>
+            <th style="border: 1px solid black; padding: 8px;">Comms</th>
+            <th style="border: 1px solid black; padding: 8px;">Status</th>
+            <th style="border: 1px solid black; padding: 8px;">RSSI</th>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 8px;" id="active-comms">Loading...</td>
+            <td style="border: 1px solid black; padding: 8px; font-style: italic; text-align: center;" id="active-comms-status">Loading...</td>
+            <td style="border: 1px solid black; padding: 8px; font-style: italic; text-align: center;" id="signal-strength">Loading...</td>
+          </tr>
+        </table>
+        <br>
+        <table style="border-collapse: collapse; width: 100%; table-layout: fixed;">
+          <tr>
+            <th style="border: 1px solid black; padding: 8px;">Link</th>
+            <th style="border: 1px solid black; padding: 8px;">State</th>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 8px;">
+              SIM OK<br>
+              UDP OK<br>
+              DTLS OK<br>
+              CLOUD OK
+            </td>
+            <td style="border: 1px solid black; padding: 8px; font-style: italic; text-align: center;" id="comms-link-status">Loading...</td>
+          </tr>
+        </table>
+            
+           
+      </table>
+    </div>
+
+    <input class="tab-input" name="tabs" type="radio" id="tab-2"/>
+    <label class="tab-label" for="tab-2">Data</label>
+    <div class="panel">
+      <table>
+        <tr><td>Last Data Sent:</td><td id="last-data-sent">Loading...</td></tr>
+        <tr><td>Measure Interval:</td><td>
+          <input type="radio" id="1sec" name="interval"><label for="1sec">1 sec</label>
+          <input type="radio" id="1min" name="interval"><label for="1min">1 min</label></td>
+        </tr>
+      </table>
+      <table class="table-data" rules=rows>
+        <thead>
+          <tr><th>Critical</th></tr>
+          <tr><td> </td></tr>
+            <tr><td>Vave</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>Iave</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>Watt</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VA</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VAR</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>PF</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>Line Freq</td><td>XXXX</td><td>-</td></tr>
+            <tr><td>Temp1</td><td>XXXX</td><td>-</td></tr>
+            <tr><td>Temp2</td><td>XXXX</td><td>-</td></tr>
+            <tr><td>Ineutral</td><td>XXXX</td><td>-</td></tr>
+            <tr><td>Vrms</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>Vmax</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>Vmin</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VTHD</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>Irms</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>Imax</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>Imin</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>ITHD</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>RSSI_min</td><td>XXXX</td><td>-</td></tr>
+            <tr><td>RSSI_ave</td><td>XXXX</td><td>-</td></tr>
+            <tr><td>RSRP</td><td>XXXX</td><td>-</td></tr>
+            <tr><td>RSRQ</td><td>XXXX</td><td>-</td></tr>
+          <tr><td> </td><td> </td><td> </td></tr>
+          <tr><th>Non-Critical</th></tr>
+            <tr><td>VFund</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM3</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM5</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM7</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM9</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM11</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM13</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM15</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM17</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM19</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>VHARM21</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IFund</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM3</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM5</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM7</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM9</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM11</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM13</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM15</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM17</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM19</td><td>XXXX</td><td>XXXX</td></tr>
+            <tr><td>IHARM21</td><td>XXXX</td><td>XXXX</td></tr>
+          </tbody>
+      </table>
+    </div>
+    <input class="tab-input" name="tabs" type="radio" id="tab-3"/>
+    <label class="tab-label" for="tab-3">Configure</label>
+    <div class="panel">
+      <form>
+        <fieldset>
+          <legend>Commands</legend>
+          <input type="text" placeholder="command string"><br>
+          <button type="button" >Send</button>
+        </fieldset>
+      </form><br>
+      <form>
+        <fieldset>
+          <legend>Diagnostics</legend>
+          <button type="button" >Download Flash Memory</button><br>
+          <button type="button" >Download User Config</button>
+        </fieldset>
+      </form>
+    </div>
+
+    <input class="tab-input" name="tabs" type="radio" id="tab-4"/>
+    <label class="tab-label" for="tab-4">Update</label>
+    <div class="panel">
+      <form>
+        <fieldset>
+          <legend>Calibration</legend>
+          <input type="file" name="calibfile" accept=".cfg">
+          <button type="button">Upload</button>
+        </fieldset>
+      </form><br>
+
+      <form>
+        <fieldset>
+          <legend>Main FW Update</legend>
+          <input type="file" name="otafile" accept=".bin">
+          <button >Update</button>
+        </fieldset>
+      </form><br>
+
+      <form>
+        <fieldset>
+          <legend>EnergyMeter FW Update</legend>
+          <input type="file" name="enmtrfile" accept=".hex">
+          <button >Update</button>
+        </fieldset>
+      </form><br>
+
+    </div>
+  </div>
+</body>
+</html>

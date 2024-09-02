@@ -1,0 +1,3 @@
+[submodule "src/general"]
+	path = src/general
+	url = http://192.168.0.50:3000/Edge_Electrons/esp32-general.git
