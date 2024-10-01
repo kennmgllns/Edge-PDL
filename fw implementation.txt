@@ -1,0 +1,27 @@
+wifi web server
+    ap
+    sta 
+    case1 - 
+    case2 - 
+    case3 - 
+    case4 - 
+    case5 - 
+    case6 - 
+    * Tabs
+        - device
+             sn
+             devid 
+             fwversion 
+             enmtr version 
+             modem 
+             imei 
+             imsi 
+             ccid 
+             
+        - data 
+        - configure 
+        - update  
+
+
+lora mesh
+ 

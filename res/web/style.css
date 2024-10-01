@@ -1,0 +1,32 @@
+body {
+  font-family:Arial,Helvetica,sans-serif; background: #efefef;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+.tabs {
+  display: flex; flex-wrap: wrap; max-width: 480px;
+  background: #e5e5e5; box-shadow: 0 48px 80px -32px rgba(0,0,0,0.3);
+}
+.tabs .tab-label {
+  width: auto; padding: 10px 10px; cursor: pointer; font-weight: bold;
+  color: #aaa; background: #eee; transition: background 0.1s, color 0.1s;
+}
+.tabs .tab-label:hover { background: #ddd; }
+.tabs .tab-label:active { background: #ccc; }
+.tabs .panel { display: none; width: 100%; padding: 10px; background: #fff; order: 99; }
+.tabs .tab-input { position: absolute; opacity: 0; }
+.tabs .tab-input:focus + .tab-label { z-index: 1; }
+.tabs .tab-input:checked + .tab-label { background: #fff; color: #0ac; }
+.tabs .tab-input:checked + .tab-label + .panel { display: block; }
+
+.table-info { width: 100%; margin: 10px; }
+
+.table-data { width: 100%; margin: 10px; font-size: 84%; }
+.table-data thead, .table-data tbody { display: block; max-height: 32vh; overflow-y: auto; }
+.table-data thead th, .table-data tbody td { text-align: center; width: 24vw; max-width: 150px; }
+
+form fieldset { border-radius: 4px; }
+form input[type="text"] { border-radius: 4px; padding: 2px; width: 96%;}
+form button { border-radius: 4px; margin: 2px; }
+
+
